@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>인테리어팀 현장보고서</title>
+  <link rel="manifest" href="manifest.json">
+  <meta property="og:title" content="인테리어팀 현장보고서">
+  <meta property="og:description" content="한경기획 인테리어팀을 위한 현장 기록 앱">
+  <meta property="og:image" content="image%202.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://giri-jun.github.io/int1/">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * { box-sizing: border-box; }
@@ -29,7 +35,7 @@
     }
     .page.active { display: block; }
     .page::before {
-      content: "- 한경기획 / 인테리어팀 전용 -";
+      content: "- 한경기획 / 인터리어팀 전용 -";
       position: absolute;
       top: 10px;
       right: 10px;
@@ -115,7 +121,7 @@
   </style>
 </head>
 <body>
-  <div id="page0" class="page active">
+  <div class="page active" id="page0">
     <div class="nav-buttons">
       <button onclick="goToPage(1)">다음</button>
     </div>
@@ -124,8 +130,7 @@
     </div>
     <div class="by-giri">- by Giri -</div>
   </div>
-
-  <div id="page1" class="page">
+  <div class="page" id="page1">
     <div class="nav-buttons">
       <button onclick="goToPage(0)">이전</button>
       <button onclick="goToPage(2)">다음</button>
@@ -134,8 +139,7 @@
     <h2>현장명 입력</h2>
     <input type="text" id="siteNameInput" placeholder="현장명을 입력하세요">
   </div>
-
-  <div id="page2" class="page">
+  <div class="page" id="page2">
     <div class="nav-buttons">
       <button onclick="goToPage(1)">이전</button>
       <button onclick="goToPage(3)">다음</button>
@@ -144,8 +148,7 @@
     <h2>공사 날짜 입력</h2>
     <input type="date" id="dateInput">
   </div>
-
-  <div id="page3" class="page">
+  <div class="page" id="page3">
     <div class="nav-buttons">
       <button onclick="goToPage(2)">이전</button>
       <button onclick="goToPage(4)">다음</button>
@@ -156,8 +159,7 @@
     <input type="file" id="photoInput" multiple accept="image/*" onchange="previewPhotos()">
     <div class="photos-preview" id="photoPreview"></div>
   </div>
-
-  <div id="page4" class="page">
+  <div class="page" id="page4">
     <div class="nav-buttons">
       <button style="width: 66%;" onclick="goToPage(3)">이전</button>
       <button style="width: 66%;" onclick="goToPage(5)">최종 확인</button>
@@ -166,11 +168,10 @@
     <h2>확인자 의견</h2>
     <textarea id="reviewerInput" placeholder="확인자의 의견을 입력하세요..."></textarea>
   </div>
-
-  <div id="page5" class="page">
+  <div class="page" id="page5">
     <div class="nav-buttons">
       <button style="width: 66%;" onclick="goToPage(4)">이전</button>
-      <button style="width: 66%;" onclick="goToPage(1)">처음 으로</button>
+      <button style="width: 66%;" onclick="goToPage(1)">처음으로</button>
     </div>
     <div class="nav-spacing"></div>
     <h2>현장 방문 보고서</h2>
@@ -185,11 +186,9 @@
       <button onclick="exportToPNG()">PNG 파일로 내보내기</button>
     </div>
   </div>
-
   <div class="popup" id="popup" ondblclick="hidePopup()">
     <img id="popupImg" src="" alt="Popup">
   </div>
-
   <script>
     function goToPage(pageNum) {
       const pages = document.querySelectorAll('.page');
@@ -202,7 +201,6 @@
         document.getElementById('finalDate').textContent = document.getElementById('dateInput').value;
         document.getElementById('finalContent').textContent = document.getElementById('contentInput').value;
         document.getElementById('finalReviewer').textContent = document.getElementById('reviewerInput').value;
-
         const photoPreview = document.getElementById('photoPreview');
         const finalPhotos = document.getElementById('finalPhotos');
         finalPhotos.innerHTML = '';
@@ -213,7 +211,6 @@
         });
       }
     }
-
     function previewPhotos() {
       const preview = document.getElementById('photoPreview');
       preview.innerHTML = "";
@@ -229,7 +226,6 @@
         reader.readAsDataURL(file);
       }
     }
-
     function exportToPNG() {
       const target = document.querySelector('.page.active');
       const hiddenElements = [];
@@ -249,16 +245,18 @@
         link.click();
       });
     }
-
     function showPopup(src) {
       const popup = document.getElementById('popup');
       const popupImg = document.getElementById('popupImg');
       popupImg.src = src;
       popup.style.display = 'flex';
     }
-
     function hidePopup() {
       document.getElementById('popup').style.display = 'none';
+    }
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker Registered'));
     }
   </script>
 </body>
