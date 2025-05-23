@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>인테리어팀 현장보고서</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f8f8f8;
+      width: 100%;
+      overflow-x: hidden;
+    }
+    .page {
+      display: none;
+      padding: 16px;
+      width: 100%;
+      max-width: 100%;
+      min-height: 100vh;
+      margin: 0 auto 30px auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.1);
+      position: relative;
+    }
+    .page.active { display: block; }
+    .page::before {
+      content: "- 한경기획 / 인테리어팀 전용 -";
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 10px;
+      color: gray;
+    }
+    .nav-buttons {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      gap: 4px;
+      z-index: 10;
+    }
+    .nav-buttons button {
+      padding: 6px 10px;
+      font-size: 12px;
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type="text"], input[type="date"], textarea, input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 15px;
+    }
+    button {
+      padding: 12px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 5px 0;
+      font-size: 15px;
+      width: 100%;
+    }
+    button:hover { background: #0056b3; }
+    .photos-preview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .photos-preview img {
+      max-width: 90px;
+      height: auto;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .popup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .popup img {
+      max-width: 90%;
+      max-height: 90%;
+    }
+    .preformatted { white-space: pre-wrap; }
+    .by-giri {
+      font-size: 14px;
+      text-align: right;
+      margin-top: 60px;
+      color: gray;
+    }
+    .nav-spacing { margin-top: 50px; }
+    h1, h2 { font-size: 1.5em; word-break: keep-all; }
+    p, label { word-break: break-word; }
+  </style>
+</head>
+<body>
+  <div id="page0" class="page active">
+    <div class="nav-buttons">
+      <button onclick="goToPage(1)">다음</button>
+    </div>
+    <div style="margin-top: 200px; text-align: center;">
+      <h1>인테리어팀 현장보고서</h1>
+    </div>
+    <div class="by-giri">- by Giri -</div>
+  </div>
+
+  <div id="page1" class="page">
+    <div class="nav-buttons">
+      <button onclick="goToPage(0)">이전</button>
+      <button onclick="goToPage(2)">다음</button>
+    </div>
+    <div class="nav-spacing"></div>
+    <h2>현장명 입력</h2>
+    <input type="text" id="siteNameInput" placeholder="현장명을 입력하세요">
+  </div>
+
+  <div id="page2" class="page">
+    <div class="nav-buttons">
+      <button onclick="goToPage(1)">이전</button>
+      <button onclick="goToPage(3)">다음</button>
+    </div>
+    <div class="nav-spacing"></div>
+    <h2>공사 날짜 입력</h2>
+    <input type="date" id="dateInput">
+  </div>
+
+  <div id="page3" class="page">
+    <div class="nav-buttons">
+      <button onclick="goToPage(2)">이전</button>
+      <button onclick="goToPage(4)">다음</button>
+    </div>
+    <div class="nav-spacing"></div>
+    <h2>공사 내용 기록 및 사진 첨부</h2>
+    <textarea id="contentInput" placeholder="공사 내용을 입력하세요..."></textarea>
+    <input type="file" id="photoInput" multiple accept="image/*" onchange="previewPhotos()">
+    <div class="photos-preview" id="photoPreview"></div>
+  </div>
+
+  <div id="page4" class="page">
+    <div class="nav-buttons">
+      <button style="width: 66%;" onclick="goToPage(3)">이전</button>
+      <button style="width: 66%;" onclick="goToPage(5)">최종 확인</button>
+    </div>
+    <div class="nav-spacing"></div>
+    <h2>확인자 의견</h2>
+    <textarea id="reviewerInput" placeholder="확인자의 의견을 입력하세요..."></textarea>
+  </div>
+
+  <div id="page5" class="page">
+    <div class="nav-buttons">
+      <button style="width: 66%;" onclick="goToPage(4)">이전</button>
+      <button style="width: 66%;" onclick="goToPage(1)">처음 으로</button>
+    </div>
+    <div class="nav-spacing"></div>
+    <h2>현장 방문 보고서</h2>
+    <p><strong>현장명:</strong> <span id="finalSiteName"></span></p>
+    <p><strong>날짜:</strong> <span id="finalDate"></span></p>
+    <p><strong>공사 내용:</strong></p>
+    <p id="finalContent" class="preformatted"></p>
+    <p><strong>확인자 의견:</strong></p>
+    <p id="finalReviewer" class="preformatted"></p>
+    <div class="photos-preview" id="finalPhotos"></div>
+    <div style="text-align: center; margin-top: 40px;">
+      <button onclick="exportToPNG()">PNG 파일로 내보내기</button>
+    </div>
+  </div>
+
+  <div class="popup" id="popup" ondblclick="hidePopup()">
+    <img id="popupImg" src="" alt="Popup">
+  </div>
+
+  <script>
+    function goToPage(pageNum) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach((page, i) => {
+        page.classList.remove('active');
+        if (i === pageNum) page.classList.add('active');
+      });
+      if (pageNum === 5) {
+        document.getElementById('finalSiteName').textContent = document.getElementById('siteNameInput').value;
+        document.getElementById('finalDate').textContent = document.getElementById('dateInput').value;
+        document.getElementById('finalContent').textContent = document.getElementById('contentInput').value;
+        document.getElementById('finalReviewer').textContent = document.getElementById('reviewerInput').value;
+
+        const photoPreview = document.getElementById('photoPreview');
+        const finalPhotos = document.getElementById('finalPhotos');
+        finalPhotos.innerHTML = '';
+        Array.from(photoPreview.children).forEach(img => {
+          const clone = img.cloneNode();
+          clone.addEventListener('click', () => showPopup(clone.src));
+          finalPhotos.appendChild(clone);
+        });
+      }
+    }
+
+    function previewPhotos() {
+      const preview = document.getElementById('photoPreview');
+      preview.innerHTML = "";
+      const files = document.getElementById('photoInput').files;
+      for (let file of files) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.addEventListener('click', () => showPopup(img.src));
+          preview.appendChild(img);
+        }
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function exportToPNG() {
+      const target = document.querySelector('.page.active');
+      const hiddenElements = [];
+      target.querySelectorAll('button').forEach(el => {
+        if (el.closest('.nav-buttons') || el.closest('div[style*="margin-top: 40px"]')) {
+          hiddenElements.push({ element: el, originalDisplay: el.style.display });
+          el.style.display = 'none';
+        }
+      });
+      html2canvas(target, { backgroundColor: '#ffffff' }).then(canvas => {
+        hiddenElements.forEach(({ element, originalDisplay }) => {
+          element.style.display = originalDisplay;
+        });
+        const link = document.createElement('a');
+        link.download = '현장_방문_보고서.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
+
+    function showPopup(src) {
+      const popup = document.getElementById('popup');
+      const popupImg = document.getElementById('popupImg');
+      popupImg.src = src;
+      popup.style.display = 'flex';
+    }
+
+    function hidePopup() {
+      document.getElementById('popup').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
