@@ -39,7 +39,7 @@
       position: absolute;
       top: 10px;
       right: 10px;
-      font-size: 10px;
+      font-size: 12px;
       color: gray;
     }
     .nav-buttons {
@@ -110,14 +110,20 @@
     }
     .preformatted { white-space: pre-wrap; }
     .by-giri {
-      font-size: 14px;
+      font-size: 12px;
       text-align: right;
-      margin-top: 60px;
+      margin-top: 100px;
       color: gray;
     }
     .nav-spacing { margin-top: 50px; }
     h1, h2 { font-size: 1.5em; word-break: keep-all; }
     p, label { word-break: break-word; }
+    .watermark {
+      text-align: center;
+      font-size: 12px;
+      color: lightgray;
+      margin-top: 60px;
+    }
   </style>
 </head>
 <body>
@@ -128,7 +134,7 @@
     <div style="margin-top: 200px; text-align: center;">
       <h1>인테리어팀 현장보고서</h1>
     </div>
-    <div class="by-giri">- by Giri -</div>
+    <div class="by-giri">ⓒ 2025 Giri.Jun</div>
   </div>
   <div class="page" id="page1">
     <div class="nav-buttons">
@@ -182,8 +188,9 @@
     <p><strong>확인자 의견:</strong></p>
     <p id="finalReviewer" class="preformatted"></p>
     <div class="photos-preview" id="finalPhotos"></div>
-    <div style="text-align: center; margin-top: 40px;">
-      <button onclick="exportToPNG()">PNG 파일로 내보내기</button>
+    <div class="watermark" style="margin-top: 12px; color: gray;">ⓒ 2025 Giri.Jun</div>
+    <div style="text-align: center; margin-top: 10px;" class="export-section">
+      <button id="exportBtn" onclick="exportToPNG()">PNG 파일로 내보내기</button>
     </div>
   </div>
   <div class="popup" id="popup" ondblclick="hidePopup()">
@@ -228,9 +235,14 @@
     }
     function exportToPNG() {
       const target = document.querySelector('.page.active');
+      const exportBtn = document.getElementById('exportBtn');
       const hiddenElements = [];
+      if (exportBtn) {
+        hiddenElements.push({ element: exportBtn, originalDisplay: exportBtn.style.display });
+        exportBtn.style.display = 'none';
+      }
       target.querySelectorAll('button').forEach(el => {
-        if (el.closest('.nav-buttons') || el.closest('div[style*="margin-top: 40px"]')) {
+        if (el.closest('.nav-buttons')) {
           hiddenElements.push({ element: el, originalDisplay: el.style.display });
           el.style.display = 'none';
         }
